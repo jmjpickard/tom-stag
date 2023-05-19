@@ -1,0 +1,94 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  background-image: linear-gradient(to bottom, #2e026d, #15162c);
+  font-family: "Courier New", Courier, monospace;
+}
+
+.content {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  gap: 70px;
+}
+
+.teams {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 50px;
+}
+
+.teamLogo {
+  width: 100px;
+  height: 100px;
+  background-color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.team {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  color: white;
+  text-align: center;
+}
+
+.teamName {
+  font-weight: bold;
+}
+
+.teamList {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.teamScore {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.scoringRules {
+  color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+@media (min-width: 640px) {
+  .scoringRules {
+    width: 60%;
+    margin: auto;
+  }
+}
+
+.adminScorer {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.addRemoveButton {
+  background-color: white;
+  color: black;
+  width: 20px;
+  height: 20px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-weight: 700;
+}

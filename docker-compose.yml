@@ -1,0 +1,24 @@
+version: "3.7"
+
+services:
+  database:
+    image: postgres:14.2
+    restart: always
+    expose:
+      - "5441"
+    ports:
+      - "5441:5441"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - the-hut-pgsql:/var/lib/postgresql/data
+    networks:
+      - skynet
+    command: -p 5441
+volumes:
+  the-hut-pgsql:
+    driver: local
+networks:
+  skynet:
+    name: note-your-day
