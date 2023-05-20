@@ -10,13 +10,13 @@ const ScoresPage: NextPage = () => {
   const scores = api.example.getTeamScores.useQuery();
 
   const addPoints = api.example.addTenPoints.useMutation({
-    onSuccess: () => {
-      scores.refetch();
+    onSuccess: async () => {
+      await scores.refetch();
     },
   });
   const removePoints = api.example.removeTenPoints.useMutation({
-    onSuccess: () => {
-      scores.refetch();
+    onSuccess: async () => {
+      await scores.refetch();
     },
   });
   const united =

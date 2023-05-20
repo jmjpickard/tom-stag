@@ -29,7 +29,7 @@ const SignIn: NextPage = ({ providers }: SignInProps) => {
         {providers &&
           Object.values(providers).map((provider) => (
             <div key={provider.name} className={styles.signInButton}>
-              <a onClick={() => signIn(provider.id)}>
+              <a onClick={() => void signIn(provider.id)}>
                 Sign in with {provider.name}
               </a>
             </div>
