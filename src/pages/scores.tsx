@@ -1,96 +1,67 @@
 import { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import styles from "./scores.module.css";
-import { ManUnited } from "~/svg/manUnited";
-import { ManCity } from "~/svg/manCity";
 import { api } from "~/utils/api";
+import { Team } from "~/components/Team";
+
+interface TeamInput {
+  name: string;
+  image: string;
+  members: string[];
+}
+
+const TEAMS = [
+  {
+    name: "Team United",
+    image:
+      "https://upload.wikimedia.org/wikipedia/sco/7/7a/Manchester_United_FC_crest.svg",
+    members: ["Jack K (Capt.)", "Harry S", "Caleb", "Jim C", "Jack P"],
+  },
+  {
+    name: "Team City",
+    image:
+      "https://upload.wikimedia.org/wikipedia/sco/e/eb/Manchester_City_FC_badge.svg",
+    members: ["Joe B (Capt.)", "Mark D", "Tom S", "Alex D", "Dave G"],
+  },
+];
 
 const ScoresPage: NextPage = () => {
   const { data: session } = useSession();
-  const scores = api.example.getTeamScores.useQuery();
+  const getTeams = api.example.getAllTeams.useQuery();
+  const teams = getTeams.data ?? [];
 
-  const addPoints = api.example.addTenPoints.useMutation({
-    onSuccess: async () => {
-      await scores.refetch();
-    },
-  });
-  const removePoints = api.example.removeTenPoints.useMutation({
-    onSuccess: async () => {
-      await scores.refetch();
-    },
-  });
-  const united =
-    scores.data?.find((team) => team.teamId === 1)?._sum.score ?? 0;
-  const city = scores.data?.find((team) => team.teamId === 2)?._sum.score ?? 0;
+  const addTeam = api.example.addTeam.useMutation();
+
+  const handleBuildTeams = (teams: TeamInput[]) => {
+    teams.forEach((team) => {
+      addTeam.mutate({
+        name: team.name,
+        logo: team.image,
+        members: team.members,
+      });
+    });
+  };
 
   return (
     <main className={styles.main}>
       <div className={styles.content}>
-        <div className={styles.teams}>
-          <div className={styles.team}>
-            <div className={styles.teamLogo}>
-              <ManUnited />
+        <div>
+          {teams.length === 0 ? (
+            <button onClick={() => handleBuildTeams(TEAMS)}>Build teams</button>
+          ) : (
+            <div className={styles.teams}>
+              {teams.map((team) => (
+                <Team
+                  key={team.id}
+                  id={team.id}
+                  name={team.teamName}
+                  image={team.teamLogo}
+                  team={team.teamMembers}
+                  session={session}
+                />
+              ))}
             </div>
-            <div className={styles.teamName}>Team United</div>
-            {session ? (
-              <div className={styles.adminScorer}>
-                <div
-                  className={styles.addRemoveButton}
-                  onClick={() => removePoints.mutate({ teamId: 1 })}
-                >
-                  -
-                </div>
-                <div className={styles.teamScore}>{united}</div>
-                <div
-                  className={styles.addRemoveButton}
-                  onClick={() => addPoints.mutate({ teamId: 1 })}
-                >
-                  +
-                </div>
-              </div>
-            ) : (
-              <div className={styles.teamScore}>{united}</div>
-            )}
-            <div className={styles.teamList}>
-              <div>Joe B (Capt.)</div>
-              <div>Mark D</div>
-              <div>Tom S</div>
-              <div>Alex D</div>
-              <div>Dave G</div>
-            </div>
-          </div>
-          <div className={styles.team}>
-            <div className={styles.teamLogo}>
-              <ManCity />
-            </div>
-            <div className={styles.teamName}>Team City</div>
-            {session ? (
-              <div className={styles.adminScorer}>
-                <div
-                  className={styles.addRemoveButton}
-                  onClick={() => removePoints.mutate({ teamId: 2 })}
-                >
-                  -
-                </div>
-                <div className={styles.teamScore}>{city}</div>
-                <div
-                  className={styles.addRemoveButton}
-                  onClick={() => addPoints.mutate({ teamId: 2 })}
-                >
-                  +
-                </div>
-              </div>
-            ) : (
-              <div className={styles.teamScore}>{city}</div>
-            )}
-            <div className={styles.teamList}>
-              <div>Jack K (Capt.)</div>
-              <div>Harry S</div>
-              <div>Caleb</div>
-              <div>Jim C</div>
-              <div>Jack P</div>
-            </div>
-          </div>
+          )}
         </div>
         <div className={styles.scoringRules}>
           <div className={styles.teamName}>Scoring rules</div>

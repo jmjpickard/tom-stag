@@ -16,7 +16,7 @@ export const exampleRouter = createTRPCRouter({
     }),
 
   addTenPoints: publicProcedure
-    .input(z.object({ teamId: z.number() }))
+    .input(z.object({ teamId: z.string() }))
     .mutation(({ input, ctx }) => {
       return ctx.prisma.teamScores.create({
         data: {
@@ -27,7 +27,7 @@ export const exampleRouter = createTRPCRouter({
     }),
 
   removeTenPoints: publicProcedure
-    .input(z.object({ teamId: z.number() }))
+    .input(z.object({ teamId: z.string() }))
     .mutation(({ input, ctx }) => {
       return ctx.prisma.teamScores.create({
         data: {
@@ -45,10 +45,40 @@ export const exampleRouter = createTRPCRouter({
       },
     });
   }),
+  getScoreByTeamId: publicProcedure
+    .input(z.object({ teamId: z.string() }))
+    .query(({ input, ctx }) => {
+      return ctx.prisma.teamScores.aggregate({
+        _sum: {
+          score: true,
+        },
+        where: {
+          teamId: input.teamId,
+        },
+      });
+    }),
 
-  getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.example.findMany();
+  getAllTeams: publicProcedure.query(({ ctx }) => {
+    return ctx.prisma.teams.findMany();
   }),
+
+  addTeam: protectedProcedure
+    .input(
+      z.object({
+        name: z.string(),
+        logo: z.string(),
+        members: z.array(z.string()),
+      })
+    )
+    .mutation(({ input, ctx }) => {
+      return ctx.prisma.teams.create({
+        data: {
+          teamName: input.name,
+          teamLogo: input.logo,
+          teamMembers: input.members,
+        },
+      });
+    }),
 
   getSecretMessage: protectedProcedure.query(() => {
     return "you can now see this secret message!";
