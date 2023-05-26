@@ -3,6 +3,7 @@ import { useSession } from "next-auth/react";
 import styles from "./scores.module.css";
 import { api } from "~/utils/api";
 import { Team } from "~/components/Team";
+import { LoadingDots } from "~/components/LoadingDots";
 
 interface TeamInput {
   name: string;
@@ -27,8 +28,8 @@ const TEAMS = [
 
 const ScoresPage: NextPage = () => {
   const { data: session } = useSession();
-  const getTeams = api.example.getAllTeams.useQuery();
-  const teams = getTeams.data ?? [];
+  const { data, isLoading } = api.example.getAllTeams.useQuery();
+  const teams = data ?? [];
 
   const addTeam = api.example.addTeam.useMutation();
 
@@ -45,9 +46,13 @@ const ScoresPage: NextPage = () => {
   return (
     <main className={styles.main}>
       <div className={styles.content}>
-        <div>
+        <div className={styles.teams}>
           {teams.length === 0 ? (
-            <button onClick={() => handleBuildTeams(TEAMS)}>Build teams</button>
+            !isLoading && (
+              <button onClick={() => handleBuildTeams(TEAMS)}>
+                Build teams
+              </button>
+            )
           ) : (
             <div className={styles.teams}>
               {teams.map((team) => (
