@@ -62,7 +62,11 @@ export const Team: React.FC<TeamProps> = ({
         </div>
       ) : (
         <>
-          {isLoading ? <LoadingDots /> : <div className={styles.teamScore} />}
+          {isLoading ? (
+            <LoadingDots />
+          ) : (
+            <div className={styles.teamScore}>{score}</div>
+          )}
         </>
       )}
       <div className={styles.teamList}>
