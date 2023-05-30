@@ -80,4 +80,16 @@ export const exampleRouter = createTRPCRouter({
   getSecretMessage: protectedProcedure.query(() => {
     return "you can now see this secret message!";
   }),
+
+  deleteRowsByTeamId: protectedProcedure
+    .input(z.object({ teamId: z.array(z.string()) }))
+    .mutation(({ input, ctx }) => {
+      return ctx.prisma.teamScores.deleteMany({
+        where: {
+          teamId: {
+            in: input.teamId,
+          },
+        },
+      });
+    }),
 });

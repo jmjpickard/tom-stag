@@ -5,6 +5,7 @@ import { api } from "~/utils/api";
 import { Team } from "~/components/Team";
 import Link from "next/link";
 import LoadingTeams from "~/components/LodingTeams";
+import type { Teams } from "@prisma/client";
 
 interface TeamInput {
   name: string;
@@ -31,8 +32,10 @@ const ScoresPage: NextPage = () => {
   const { data: session } = useSession();
   const { data, isLoading } = api.example.getAllTeams.useQuery();
   const teams = data ?? [];
+  const teamIds = teams.map((team: Teams) => team.id);
 
   const addTeam = api.example.addTeam.useMutation();
+  const deleteRows = api.example.deleteRowsByTeamId.useMutation();
 
   const handleBuildTeams = (teams: TeamInput[]) => {
     teams.forEach((team) => {
@@ -111,6 +114,9 @@ const ScoresPage: NextPage = () => {
               Pickard alone.
             </p>
           </div>
+          <button onClick={() => deleteRows.mutate({ teamId: teamIds })}>
+            Delete all rows
+          </button>
         </div>
       )}
     </main>
