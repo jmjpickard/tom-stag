@@ -18,11 +18,9 @@ const LoadingTeams: React.FC = () => {
   const textAnimation = useAnimation();
 
   useEffect(() => {
-    const startAnimation = async () => {
+    async () => {
       await textAnimation.start("animate");
     };
-
-    startAnimation();
   }, [textAnimation]);
 
   return (

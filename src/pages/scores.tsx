@@ -3,7 +3,6 @@ import { useSession } from "next-auth/react";
 import styles from "./scores.module.css";
 import { api } from "~/utils/api";
 import { Team } from "~/components/Team";
-import { LoadingDots } from "~/components/LoadingDots";
 import Link from "next/link";
 import LoadingTeams from "~/components/LodingTeams";
 
