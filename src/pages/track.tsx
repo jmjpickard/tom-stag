@@ -22,6 +22,7 @@ const TrackPage: NextPage = () => {
       teamId: name?.teamName ?? team.teamId,
     };
   });
+  const colors = ["red", "lightblue"];
 
   return (
     <main className={styles.main}>
@@ -35,13 +36,14 @@ const TrackPage: NextPage = () => {
             <YAxis />
             <Tooltip />
             <Legend />
-            {dataWithTeamNames?.map(({ teamId, teamScores }) => (
+            {dataWithTeamNames?.map(({ teamId, teamScores }, index) => (
               <Line
                 key={teamId}
                 type="monotone"
                 dataKey="cumulativeScore"
                 name={teamId}
                 data={teamScores}
+                stroke={colors[index] ?? "#8884d8"}
               />
             ))}
           </LineChart>
