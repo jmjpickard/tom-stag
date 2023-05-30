@@ -5,6 +5,7 @@ import {
   publicProcedure,
   protectedProcedure,
 } from "~/server/api/trpc";
+import { calculateCumulativeScores } from "../utils";
 
 export const exampleRouter = createTRPCRouter({
   hello: publicProcedure
@@ -37,13 +38,9 @@ export const exampleRouter = createTRPCRouter({
       });
     }),
 
-  getTeamScores: publicProcedure.query(({ input, ctx }) => {
-    return ctx.prisma.teamScores.groupBy({
-      by: ["teamId"],
-      _sum: {
-        score: true,
-      },
-    });
+  getTeamScores: publicProcedure.query(async ({ input, ctx }) => {
+    const allRows = await ctx.prisma.teamScores.findMany();
+    return calculateCumulativeScores(allRows);
   }),
   getScoreByTeamId: publicProcedure
     .input(z.object({ teamId: z.string() }))

@@ -92,3 +92,17 @@
   cursor: pointer;
   font-weight: 700;
 }
+
+.trackButton {
+  margin: auto;
+  background-color: white;
+  color: black;
+  width: 150px;
+  height: 40px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-weight: 700;
+}

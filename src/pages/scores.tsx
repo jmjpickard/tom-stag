@@ -4,6 +4,8 @@ import styles from "./scores.module.css";
 import { api } from "~/utils/api";
 import { Team } from "~/components/Team";
 import { LoadingDots } from "~/components/LoadingDots";
+import Link from "next/link";
+import LoadingTeams from "~/components/LodingTeams";
 
 interface TeamInput {
   name: string;
@@ -45,62 +47,73 @@ const ScoresPage: NextPage = () => {
 
   return (
     <main className={styles.main}>
-      <div className={styles.content}>
-        <div className={styles.teams}>
-          {teams.length === 0 ? (
-            !isLoading && (
-              <button onClick={() => handleBuildTeams(TEAMS)}>
-                Build teams
-              </button>
-            )
-          ) : (
-            <div className={styles.teams}>
-              {teams.map((team) => (
-                <Team
-                  key={team.id}
-                  id={team.id}
-                  name={team.teamName}
-                  image={team.teamLogo}
-                  team={team.teamMembers}
-                  session={session}
-                />
-              ))}
+      {isLoading ? (
+        <LoadingTeams />
+      ) : (
+        <div className={styles.content}>
+          <div className={styles.teams}>
+            {teams.length === 0 ? (
+              !isLoading && (
+                <button onClick={() => handleBuildTeams(TEAMS)}>
+                  Build teams
+                </button>
+              )
+            ) : (
+              <div className={styles.teams}>
+                {teams.map((team) => (
+                  <Team
+                    key={team.id}
+                    id={team.id}
+                    name={team.teamName}
+                    image={team.teamLogo}
+                    team={team.teamMembers}
+                    session={session}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+          <Link href="/track">
+            <div className={styles.trackButton}>Track scores</div>
+          </Link>
+          <div className={styles.scoringRules}>
+            <div className={styles.teamName}>Scoring rules</div>
+            <div>
+              <div>Go-Kart @12pm (2x8 lap races)</div>
+              <ul>
+                <li>50 points winner</li>
+                <li>40 points 2nd</li>
+                <li>30 points 3rd</li>
+                <li>20 points 4th</li>
+                <li>30 points to worst driver</li>
+              </ul>
             </div>
-          )}
-        </div>
-        <div className={styles.scoringRules}>
-          <div className={styles.teamName}>Scoring rules</div>
-          <div>
-            <div>Go-Kart @12pm (2x8 lap races)</div>
-            <ul>
-              <li>50 points winner</li>
-              <li>40 points 2nd</li>
-              <li>30 points 3rd</li>
-              <li>20 points 4th</li>
-              <li>30 points to worst driver</li>
-            </ul>
-          </div>
-          <div>
-            <div>Darts @2pm</div>
-            <ul>
-              <li>30 points to winner of each game</li>
-            </ul>
-          </div>
-          <div>
-            <div>FA cup final @3pm</div>
-            <ul>
-              <li>£10 bet per team {"->"} points per pound won</li>
-              <li>50 points to winning team</li>
-            </ul>
-          </div>
-          <div>
-            <div>Casino @9:30pm</div>
-            <ul>
-              <li>£15 per person {"->"} points per pound won</li>
-            </ul>
+            <div>
+              <div>Darts @2pm</div>
+              <ul>
+                <li>30 points to winner of each game</li>
+              </ul>
+            </div>
+            <div>
+              <div>FA cup final @3pm</div>
+              <ul>
+                <li>£10 bet per team {"->"} points per pound won</li>
+                <li>50 points to winning team</li>
+              </ul>
+            </div>
+            <div>
+              <div>Casino @9:30pm</div>
+              <ul>
+                <li>£15 per person {"->"} points per pound won</li>
+              </ul>
+            </div>
+            <p>
+              Points may be rewarded or taken away at the discretion of Jack
+              Pickard alone.
+            </p>
           </div>
         </div>
-      </div>
+      )}
     </main>
   );
 };
