@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
-import { motion, useAnimation, Variants } from "framer-motion";
+import { motion, useAnimation } from "framer-motion";
+import type { Variants } from "framer-motion";
 
 const LoadingTeams: React.FC = () => {
   const phraseVariants: Variants = {
@@ -40,6 +41,7 @@ const LoadingTeams: React.FC = () => {
           color: "white",
           display: "flex",
           alignItems: "center",
+          transform: "translate3d(0, 0, 0)",
         }}
         initial="initial"
         animate={textAnimation}
