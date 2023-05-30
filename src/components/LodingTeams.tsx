@@ -32,7 +32,7 @@ const LoadingTeams: React.FC = () => {
     >
       <motion.h1
         style={{
-          fontFamily: "Arial, sans-serif",
+          fontFamily: "Courier New",
           fontSize: "32px",
           fontWeight: "bold",
           color: "white",
