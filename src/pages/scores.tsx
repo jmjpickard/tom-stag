@@ -116,9 +116,11 @@ const ScoresPage: NextPage = () => {
               Pickard alone.
             </p>
           </div>
-          <button onClick={() => deleteRows.mutate({ teamId: teamIds })}>
-            Delete all rows
-          </button>
+          {session && (
+            <button onClick={() => deleteRows.mutate({ teamId: teamIds })}>
+              Delete all rows
+            </button>
+          )}
         </div>
       )}
     </main>
