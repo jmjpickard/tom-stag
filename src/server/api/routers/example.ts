@@ -1,11 +1,17 @@
 import { z } from "zod";
+import { groupBy } from "lodash";
 
 import {
   createTRPCRouter,
   publicProcedure,
   protectedProcedure,
 } from "~/server/api/trpc";
-import { calculateCumulativeScores } from "../utils";
+import {
+  TeamScoreResult,
+  calculateCumulativeScores,
+  groupByAndAggregate,
+} from "../utils";
+import { TeamScores } from "@prisma/client";
 
 export const exampleRouter = createTRPCRouter({
   hello: publicProcedure
@@ -40,7 +46,16 @@ export const exampleRouter = createTRPCRouter({
 
   getTeamScores: publicProcedure.query(async ({ input, ctx }) => {
     const allRows = await ctx.prisma.teamScores.findMany();
-    return calculateCumulativeScores(allRows);
+    const groupByTeam = groupBy(allRows, (row: TeamScores) => row.teamId);
+    return Object.entries(groupByTeam).map(
+      ([teamId, teamScores]: [string, TeamScores[]]) => {
+        const cumulativeScores = calculateCumulativeScores(teamScores);
+        return {
+          teamId,
+          teamScores: cumulativeScores,
+        };
+      }
+    );
   }),
   getScoreByTeamId: publicProcedure
     .input(z.object({ teamId: z.string() }))

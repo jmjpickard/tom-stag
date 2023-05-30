@@ -113,7 +113,7 @@ const ScoresPage: NextPage = () => {
             </div>
             <p>
               Points may be rewarded or taken away at the discretion of Jack
-              Pickard alone.
+              Pickard alone. Oh yes, that is real power.
             </p>
           </div>
           {session && (

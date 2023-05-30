@@ -6,6 +6,7 @@ import {
   Legend,
   Line,
   LineChart,
+  ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
@@ -13,37 +14,38 @@ import {
 
 const TrackPage: NextPage = () => {
   const { data: teams, isLoading } = api.example.getAllTeams.useQuery();
-  const teamNames = teams?.map((team) => team.teamName) ?? [];
   const { data } = api.example.getTeamScores.useQuery();
-  console.log(data);
-  const scores = data?.map((score) => {
-    const team = teams?.find((team) => team.id === score.teamId);
+  const dataWithTeamNames = data?.map((team) => {
+    const name = teams?.find((t) => t.id === team.teamId);
     return {
-      date: new Date(score.timeInterval),
-      [team?.teamName ?? "Team"]: score.cumulativeScore,
+      ...team,
+      teamId: name?.teamName ?? team.teamId,
     };
   });
+
   return (
     <main className={styles.main}>
       {isLoading ? (
         <div>Loading chart...</div>
       ) : (
-        <div>
-          <LineChart
-            width={730}
-            height={250}
-            data={scores}
-            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-          >
+        <ResponsiveContainer width="100%" height={400}>
+          <LineChart data={data}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
+            <XAxis dataKey="data[0].timeInterval" />
             <YAxis />
             <Tooltip />
             <Legend />
-            <Line type="monotone" dataKey={teamNames[0]} stroke="#8884d8" />
-            <Line type="monotone" dataKey={teamNames[1]} stroke="#82ca9d" />
+            {dataWithTeamNames?.map(({ teamId, teamScores }) => (
+              <Line
+                key={teamId}
+                type="monotone"
+                dataKey="cumulativeScore"
+                name={teamId}
+                data={teamScores}
+              />
+            ))}
           </LineChart>
-        </div>
+        </ResponsiveContainer>
       )}
     </main>
   );
