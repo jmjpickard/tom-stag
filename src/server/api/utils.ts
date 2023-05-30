@@ -13,7 +13,7 @@ export const calculateCumulativeScores = (
     (a, b) => a.createdAt.getTime() - b.createdAt.getTime()
   );
 
-  const fifteenMinutes = 15 * 60 * 1000; // 15 minutes in milliseconds
+  const fiveMinutes = 5 * 60 * 1000; // 15 minutes in milliseconds
 
   const result: TeamScoreResult[] = [];
 
@@ -23,8 +23,7 @@ export const calculateCumulativeScores = (
   const firstScoreTime = sortedScores[0] as TeamScores;
 
   let currentTimeInterval = new Date(
-    Math.floor(firstScoreTime.createdAt.getTime() / fifteenMinutes) *
-      fifteenMinutes
+    Math.floor(firstScoreTime.createdAt.getTime() / fiveMinutes) * fiveMinutes
   );
   let currentCumulativeScore = 0;
 
@@ -32,7 +31,7 @@ export const calculateCumulativeScores = (
     const scoreTime = score.createdAt.getTime();
     const timeDifference = scoreTime - currentTimeInterval.getTime();
 
-    if (timeDifference >= fifteenMinutes) {
+    if (timeDifference >= fiveMinutes) {
       result.push({
         teamId: score.teamId,
         timeInterval: currentTimeInterval,
@@ -40,7 +39,7 @@ export const calculateCumulativeScores = (
       });
 
       currentTimeInterval = new Date(
-        Math.floor(scoreTime / fifteenMinutes) * fifteenMinutes
+        Math.floor(scoreTime / fiveMinutes) * fiveMinutes
       );
     }
 
