@@ -30,12 +30,14 @@ const TEAMS = [
 
 const ScoresPage: NextPage = () => {
   const { data: session } = useSession();
-  const { data, isLoading } = api.example.getAllTeams.useQuery();
+  const { data, isLoading, refetch } = api.example.getAllTeams.useQuery();
   const teams = data ?? [];
   const teamIds = teams.map((team: Teams) => team.id);
 
   const addTeam = api.example.addTeam.useMutation();
-  const deleteRows = api.example.deleteRowsByTeamId.useMutation();
+  const deleteRows = api.example.deleteRowsByTeamId.useMutation({
+    onSuccess: () => refetch(),
+  });
 
   const handleBuildTeams = (teams: TeamInput[]) => {
     teams.forEach((team) => {
